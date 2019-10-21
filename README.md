@@ -7,7 +7,7 @@ Storyline:
 Garbanzo and his friends, raw beans, are dumped into a heated crockpot! Oh No! If they are in the boiling water too long, they will turn to mush and get eaten by a human.
 
 Gameplay:
-Garbanzo can ride bubbles to the surface to escape, but must avoid falling bean carnage and the dreadful ladle-boss. Additionally, bubbles can pop.
+Garbanzo can ride bubbles to the surface to escape, but must avoid falling bean carnage and the dreadful ladle-boss. Additionally, bubbles can pop. Bubbles generate on the floor of the pot and rise to the surface.
 
 You can score points in form of bubble-coin and every time you escape you move on to the next level , which is more difficult and more sparse in bubble-count, and has a different background design. 
 
