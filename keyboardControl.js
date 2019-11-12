@@ -1,4 +1,4 @@
-var context, controller, rectangle, loop;
+var context, controller, bean, loop;
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -7,9 +7,9 @@ context.canvas.width = 400;
 
 
 var image = new Image();
-  image.src = 'images/bean.png';
+image.src = 'images/bean.png';
 
-rectangle = {
+bean = {
   height:110,
   jumping:true,
   width:110,
@@ -18,12 +18,6 @@ rectangle = {
   y:0,
   y_velocity:0
 };
-
-/*var image = new Image();
-  image.src = 'images/bean.png';
-  image.onload = function(){
-  context.drawImage(image, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-}*/
 
 controller = {
 
@@ -52,67 +46,62 @@ controller = {
 
 };
 
-loop = function() {
+function loop() {
 
-  if (controller.up && rectangle.jumping == false) {
+  if (controller.up && bean.jumping == false) {
 
-    rectangle.y_velocity -= 20;
-    rectangle.jumping = true;
+    bean.y_velocity -= 20;
+    bean.jumping = true;
 
   }
 
   if (controller.left) {
 
-    rectangle.x_velocity -= 0.5;
+    bean.x_velocity -= 0.5;
 
   }
 
   if (controller.right) {
 
-    rectangle.x_velocity += 0.5;
+    bean.x_velocity += 0.5;
 
   }
 
-  rectangle.y_velocity += 1.5;// gravity
-  rectangle.x += rectangle.x_velocity;
-  rectangle.y += rectangle.y_velocity;
-  rectangle.x_velocity *= 0.9;// friction
-  rectangle.y_velocity *= 0.9;// friction
+  bean.y_velocity += 1.5;// gravity
+  bean.x += bean.x_velocity;
+  bean.y += bean.y_velocity;
+  bean.x_velocity *= 0.9;// friction
+  bean.y_velocity *= 0.9;// friction
 
-  // if rectangle is falling below floor line
-  if (rectangle.y > 520 - 16 - 32) {
+  // if bean is falling below floor line
+  if (bean.y > 520 - 16 - 32) {
 
-    rectangle.jumping = false;
-    rectangle.y = 520 - 16 - 32;
-    rectangle.y_velocity = 0;
-
-  }
-
-  // if rectangle is going off the left of the screen
-  if (rectangle.x < -40) {
-
-    rectangle.x = 400;
-
-  } else if (rectangle.x > 400) {// if rectangle goes past right boundary
-
-    rectangle.x = -40;
+    bean.jumping = false;
+    bean.y = 520 - 16 - 32;
+    bean.y_velocity = 0;
 
   }
 
+  // if bean is going off the left of the screen
+  if (bean.x < -40) {
 
-  context.fillStyle = "blue";
+    bean.x = 400;
+
+  } else if (bean.x > 400) {// if bean goes past right boundary
+
+    bean.x = -40;
+
+  }
+
+
+  // context.fillStyle = "blue";
   context.fillRect(0, 0, 400, 600);// x, y, width, height
   context.fillStyle = "green";// hex for red
   context.beginPath();
 
-  context.drawImage(image, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+  //draws bean
+  context.drawImage(image, bean.x, bean.y, bean.width, bean.height);
 
-  //context.strokeStyle = "blue";
-  context.lineWidth = 4;
-  context.beginPath();
-  context.moveTo(0, 164);
-  context.lineTo(400, 600);
-  //context.stroke(); how do i make it bigger
   // call update when the browser is ready to draw again
   window.requestAnimationFrame(loop);
 
