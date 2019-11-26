@@ -1,17 +1,13 @@
-var context, controller, bean, loop;
-
-context = document.querySelector("canvas").getContext("2d");
-
-context.canvas.height = 600;
-context.canvas.width = 400;
-
-
+var controller, bean, loop;
+var canvas = document.getElementById("mainCanvas");
+var context = canvas.getContext("2d");
 var image = new Image();
 image.src = 'images/bean.png';
 
 bean = {
-  height:110,
+  height:40,
   jumping:true,
+  inBubble:false,
   width:110,
   x:180-32, // center of the canvas
   x_velocity:0,
@@ -46,14 +42,16 @@ controller = {
 
 };
 
-function loop() {
 
-  if (controller.up && bean.jumping == false) {
+
+function drawBean() {
+  if (controller.up && (bean.jumping == false||bean.inBubble)) { //(controller.up && bean.jumping == false)
 
     bean.y_velocity -= 20;
     bean.jumping = true;
 
   }
+
 
   if (controller.left) {
 
@@ -66,47 +64,61 @@ function loop() {
     bean.x_velocity += 0.5;
 
   }
+  if (bean.inBubble==false) {
 
-  bean.y_velocity += 1.5;// gravity
+    bean.y_velocity += 0.5;// gravity
+    bean.x_velocity *= 0.9;// friction
+    bean.y_velocity *= 0.9;// friction
+  }
+
+  if (bean.inBubble==true) {
+    bean.y_velocity= -1*bubbleVelocity;
+    // bean.x_velocity=0;
+    if (controller.up) {
+      bean.y_velocity -=5;
+    }
+  }
+
   bean.x += bean.x_velocity;
   bean.y += bean.y_velocity;
-  bean.x_velocity *= 0.9;// friction
-  bean.y_velocity *= 0.9;// friction
 
   // if bean is falling below floor line
-  if (bean.y > 520 - 16 - 32) {
+  if (bean.y > canvas.height-bean.height) {
 
     bean.jumping = false;
-    bean.y = 520 - 16 - 32;
+    bean.y = canvas.height-bean.height;
     bean.y_velocity = 0;
 
   }
 
   // if bean is going off the left of the screen
-  if (bean.x < -40) {
+  if (bean.x<goal.width+10&&(bean.y>goal.y-goal.height||bean.y+bean.height<goalB.bottom)) {
 
-    bean.x = 400;
+    bean.x_velocity=5;
+    // bean.x=goal.width+bean.width+10;
 
-  } else if (bean.x > 400) {// if bean goes past right boundary
+  } else if (bean.x+bean.height > canvas.width) {// if bean goes past right boundary
 
-    bean.x = -40;
+    bean.x_velocity = -5;
 
   }
+  if (bean.x<goal.width&&bean.y+bean.height>goal.y-goal.height+2&&bean.y+bean.height>goalB.bottom) {
+    scoreBoom();
+    bean.x=canvas.width/2;
+    bean.y=canvas.height-bean.height;
+  }
 
+  //drawing bean
+  context.drawImage(image, bean.x, bean.y, bean.height, bean.height);
+}
 
-  // context.fillStyle = "blue";
-  context.fillRect(0, 0, 400, 600);// x, y, width, height
-  context.fillStyle = "green";// hex for red
-  context.beginPath();
+function scoreBoom() {
+  score++;
+  goal.height+=50;
+  bubbleFrequency-=100;
+  bubbleVelocity+=1;
+}
 
-  //draws bean
-  context.drawImage(image, bean.x, bean.y, bean.width, bean.height);
-
-  // call update when the browser is ready to draw again
-  window.requestAnimationFrame(loop);
-
-};
 
 window.addEventListener("keydown", controller.keyListener)
 window.addEventListener("keyup", controller.keyListener);
-window.requestAnimationFrame(loop);
